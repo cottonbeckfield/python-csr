@@ -17,11 +17,19 @@ import argparse
 # Generate Certificate Signing Request (CSR)
 def generateCSR(nodename, sans = []):
 
-    C  = 'US'
-    ST = 'New York'
-    L  = 'Location'
-    O  = 'Organization'
-    OU = 'Organizational Unit'
+    C  = raw_input('Enter your country: ')
+    ST = raw_input("Enter your state: ")
+    L  = raw_input("Enter your location: ")
+    O  = raw_input("Enter your organization: ")
+    OU = raw_input("Enter your organizational unit: ")
+
+    # Allows you to permanently set values required for CSR
+    # To use, comment raw_input and uncomment this section.
+    # C  = 'US'
+    # ST = 'New York'
+    # L  = 'Location'
+    # O  = 'Organization'
+    # OU = 'Organizational Unit'
 
     csrfile = 'host.csr'
     keyfile = 'host.key'
