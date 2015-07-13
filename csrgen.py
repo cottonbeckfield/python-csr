@@ -17,12 +17,28 @@ import argparse
 # Generate Certificate Signing Request (CSR)
 def generateCSR(nodename, sans = []):
 
+  while True:
     C  = raw_input("Enter your Country Name (2 letter code) [US]: ")
+    if len(C) != 2:
+      print "You must enter two letters. You entered %r" % (C)
+      continue
     ST = raw_input("Enter your State or Province <full name> []:California: ")
+    if len(ST) == 0:
+      print "Please enter your State or Province."
+      continue
     L  = raw_input("Enter your (Locality Name (eg, city) []:San Francisco: ")
+    if len(L) == 0:
+      print "Please enter your City."
+      continue
     O  = raw_input("Enter your Organization Name (eg, company) []:FTW Enterprise: ")
+    if len(L) == 0:
+       print "Please enter your Organization Name."
+       continue
     OU = raw_input("Enter your Organizational Unit (eg, section) []:IT: ")
-
+    if len(OU) == 0:
+      print "Please enter your OU."
+      continue
+    
     # Allows you to permanently set values required for CSR
     # To use, comment raw_input and uncomment this section.
     # C  = 'US'
