@@ -7,7 +7,7 @@
 # certificate and request are generated.  This can be acheived by adding -s.
 # Usage: csrgen <hostname> -s <san0> <san1>
 #
-# Author: Courtney Cotton <me@cottoncourtney.com> 06-25-2014
+# Author: Courtney Cotton <cotton@cottoncourtney.com> 06-25-2014
 
 # Libraries/Modules
 from OpenSSL import crypto, SSL
@@ -17,11 +17,11 @@ import argparse
 # Generate Certificate Signing Request (CSR)
 def generateCSR(nodename, sans = []):
 
-    C  = raw_input('Enter your country: ')
-    ST = raw_input("Enter your state: ")
-    L  = raw_input("Enter your location: ")
-    O  = raw_input("Enter your organization: ")
-    OU = raw_input("Enter your organizational unit: ")
+    C  = raw_input("Enter your Country Name (2 letter code) [US]: ")
+    ST = raw_input("Enter your State or Province <full name> []:California: ")
+    L  = raw_input("Enter your (Locality Name (eg, city) []:San Francisco: ")
+    O  = raw_input("Enter your Organization Name (eg, company) []:FTW Enterprise: ")
+    OU = raw_input("Enter your Organizational Unit (eg, section) []:IT: ")
 
     # Allows you to permanently set values required for CSR
     # To use, comment raw_input and uncomment this section.
