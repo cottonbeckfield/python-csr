@@ -9,6 +9,9 @@
 #
 # Author: Courtney Cotton <cotton@cottoncourtney.com> 06-25-2014
 
+# mod'd for python 3.5
+
+
 # Libraries/Modules
 from OpenSSL import crypto, SSL
 import subprocess, os, sys, shutil
@@ -77,6 +80,7 @@ def generateCSR(nodename, sans = []):
     # Utilizes generateKey function to kick off key generation.
     key = generateKey(TYPE_RSA, 2048)
     req.set_pubkey(key)
+    #change to sha 256?
     req.sign(key, "sha1")
     generateFiles(csrfile, req)
     generateFiles(keyfile, key)
@@ -96,13 +100,13 @@ def generateFiles(mkFile, request):
         f = open(mkFile, "w")
         f.write(crypto.dump_certificate_request(crypto.FILETYPE_PEM, request))
         f.close()
-        print crypto.dump_certificate_request(crypto.FILETYPE_PEM, request)
+        print(crypto.dump_certificate_request(crypto.FILETYPE_PEM, request))
     elif mkFile == 'host.key':
         f = open(mkFile, "w")
         f.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, request))
         f.close()
     else:
-        print "Failed."
+        print("Failed.")
         exit()
 
 
