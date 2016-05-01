@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Generate a key, self-signed certificate, and certificate request.
 # Usage: csrgen <fqdn>
@@ -14,7 +14,9 @@
 
 # Libraries/Modules
 from OpenSSL import crypto, SSL
-import subprocess, os, sys, shutil
+import subprocess
+import os
+import sys, shutil
 import argparse
 
 # Generate Certificate Signing Request (CSR)
@@ -66,22 +68,29 @@ def generateCSR(nodename, sans = []):
     req.get_subject().localityName = L
     req.get_subject().organizationName = O
     req.get_subject().organizationalUnitName = OU
+
     # Add in extensions
+    # added bytearray to string
+    # before -> "keyUsage"
+    # after  -> b"keyUsage"
+
     base_constraints = ([
-        crypto.X509Extension("keyUsage", False, "Digital Signature, Non Repudiation, Key Encipherment"),
-        crypto.X509Extension("basicConstraints", False, "CA:FALSE"),
+        crypto.X509Extension(b"keyUsage", False, b"Digital Signature, Non Repudiation, Key Encipherment"),
+        crypto.X509Extension(b"basicConstraints", False, b"CA:FALSE"),
     ])
     x509_extensions = base_constraints
     # If there are SAN entries, append the base_constraints to include them.
     if ss:
-        san_constraint = crypto.X509Extension("subjectAltName", False, ss)
+        san_constraint = crypto.X509Extension(b"subjectAltName", False, ss)
         x509_extensions.append(san_constraint)
     req.add_extensions(x509_extensions)
     # Utilizes generateKey function to kick off key generation.
     key = generateKey(TYPE_RSA, 2048)
     req.set_pubkey(key)
+
     #change to sha 256?
-    req.sign(key, "sha1")
+    #req.sign(key, "sha1")
+    req.sign(key, "sha256")
     generateFiles(csrfile, req)
     generateFiles(keyfile, key)
     return req
@@ -98,12 +107,12 @@ def generateFiles(mkFile, request):
 
     if mkFile == 'host.csr':
         f = open(mkFile, "w")
-        f.write(crypto.dump_certificate_request(crypto.FILETYPE_PEM, request))
+        f.write(str(crypto.dump_certificate_request(crypto.FILETYPE_PEM, request)))
         f.close()
         print(crypto.dump_certificate_request(crypto.FILETYPE_PEM, request))
     elif mkFile == 'host.key':
         f = open(mkFile, "w")
-        f.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, request))
+        f.write(str(crypto.dump_privatekey(crypto.FILETYPE_PEM, request)))
         f.close()
     else:
         print("Failed.")
@@ -111,6 +120,7 @@ def generateFiles(mkFile, request):
 
 
 # Run Portion
+
 parser = argparse.ArgumentParser()
 parser.add_argument("name", help="Provide the FQDN", action="store")
 parser.add_argument("-s", "--san", help="SANS", action="store", nargs='*', default="")
@@ -118,5 +128,4 @@ args = parser.parse_args()
 
 hostname = args.name
 sans = args.san
-
 generateCSR(hostname, sans)
