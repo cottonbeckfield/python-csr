@@ -78,9 +78,14 @@ def generateCSR(nodename, sans = []):
     # Utilizes generateKey function to kick off key generation.
     key = generateKey(TYPE_RSA, 2048)
     req.set_pubkey(key)
-    req.sign(key, "sha1")
+
+    #update sha?
+    #req.sign(key, "sha1")
+    req.sign(key, "sha256")
+
     generateFiles(csrfile, req)
     generateFiles(keyfile, key)
+    
     return req
 
 # Generate Private Key
