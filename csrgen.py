@@ -85,7 +85,7 @@ def generateCSR(nodename, sans = []):
 
     generateFiles(csrfile, req)
     generateFiles(keyfile, key)
-    
+
     return req
 
 # Generate Private Key

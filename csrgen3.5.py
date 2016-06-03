@@ -110,7 +110,7 @@ def generateFiles(mkFile, request):
         f.close()
 
         # print test
-        print(crypto.dump_certificate_request(crypto.FILETYPE_PEM, request))
+        #print(crypto.dump_certificate_request(crypto.FILETYPE_PEM, request))
 
     elif mkFile == 'host.key':
         f = open(mkFile, "wb")
