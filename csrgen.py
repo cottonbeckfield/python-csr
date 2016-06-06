@@ -2,7 +2,7 @@
 #
 # Generate a key, self-signed certificate, and certificate request.
 # Usage: csrgen <fqdn>
-# 
+#
 # When more than one hostname is provided, a SAN (Subject Alternate Name)
 # certificate and request are generated.  This can be acheived by adding -s.
 # Usage: csrgen <hostname> -s <san0> <san1>
@@ -10,9 +10,10 @@
 # Author: Courtney Cotton <cotton@cottoncourtney.com> 06-25-2014
 
 # Libraries/Modules
-from OpenSSL import crypto, SSL
-import subprocess, os, sys, shutil
+
 import argparse
+from OpenSSL import crypto
+
 
 # Generate Certificate Signing Request (CSR)
 def generateCSR(nodename, sans = []):
@@ -38,7 +39,7 @@ def generateCSR(nodename, sans = []):
     if len(OU) == 0:
       print "Please enter your OU."
       continue
-    
+
     # Allows you to permanently set values required for CSR
     # To use, comment raw_input and uncomment this section.
     # C  = 'US'
@@ -77,9 +78,14 @@ def generateCSR(nodename, sans = []):
     # Utilizes generateKey function to kick off key generation.
     key = generateKey(TYPE_RSA, 2048)
     req.set_pubkey(key)
-    req.sign(key, "sha1")
+
+    #update sha?
+    #req.sign(key, "sha1")
+    req.sign(key, "sha256")
+
     generateFiles(csrfile, req)
     generateFiles(keyfile, key)
+
     return req
 
 # Generate Private Key
@@ -88,7 +94,7 @@ def generateKey(type, bits):
     key = crypto.PKey()
     key.generate_key(type, bits)
     return key
-    
+
 # Generate .csr/key files.
 def generateFiles(mkFile, request):
 
