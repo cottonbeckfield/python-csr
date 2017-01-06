@@ -14,3 +14,11 @@ Usage: csrgen <hostname> -s <san0> <san1>
 ```
 python csrgen test.test.com -s mushu.test.com pushu.test.com
 ```
+When you do not want to be prompted for locality, you can use a config file.
+This can be acheived by adding -c. (SAN request still work)
+
+Usage: csrgen <hostnaem> -c your_config -s <san0> <san1>
+
+```
+python csrgen test.test.com -c csrgen.conf -s mushu.test.com pushu.test.com
+```
