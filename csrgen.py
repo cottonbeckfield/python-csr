@@ -20,11 +20,11 @@ from OpenSSL.crypto import FILETYPE_PEM
 def generateCSR(nodename, unattended, sans = []):
 
   default_C =  "ES"
-  default_ST = "Alicante"
-  default_L =  "Alicante"
-  default_O =  "EUIPO"
-  default_OU = "DTD"
-  default_EM = "IECI_ALTIA_Unix@ext.euipo.europa.eu"
+  default_ST = "State"
+  default_L =  "Locality"
+  default_O =  "ORG"
+  default_OU = "ORG_Unit"
+  default_EM = "account@example.com"
 
   #interactive mode
   loop = True
@@ -129,7 +129,7 @@ def generateFiles(mkFile, request):
 def checkCSR(nodename):
 
     try:
-      f = open(nodename + ".csr", "r")
+      f = open(nodename, "r")
       csr = f.read()
       f.close()
     except Exception as e:
