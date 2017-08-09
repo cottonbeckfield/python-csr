@@ -7,6 +7,17 @@ You'll notice there is a csrgen and csrgen35. This corresponds to their respecti
 - csrgen uses Python 2.7
 - csrgen34 uses Python 3.5
 
+## Installation / Dependencies
+The following modules are required:
+- OpenSSL (pyopenssl)
+- Argparse (argparse)
+- YAML (pyyaml)
+
+I've included a setup.py that will install these dependencies if you run:
+```
+python setup.py install`
+```
+
 ## Usage
 csrgen [fqdn]
 

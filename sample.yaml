@@ -1,0 +1,15 @@
+---
+  host1:
+    hostname: 'cookies.com'
+    sans:
+      - 'sugar.cookies.com'
+      - 'pb.cookies.com'
+  host2:
+    hostname: 'muffins.com'
+    sans:
+      - 'bran.muffins.com'
+      - 'blueberry.muffins.com'
+      - 'rasberry.muffins.com'
+  host3:
+    hostname: 'cake.com'
+    sans:

@@ -15,6 +15,7 @@
 # Libraries/Modules
 from OpenSSL import crypto, SSL
 import argparse
+import yaml
 
 
 # Generate Certificate Signing Request (CSR)
@@ -122,12 +123,20 @@ def generateFiles(mkFile, request):
 
 
 # Run Portion
-
+# This section will parse the flags available via command line.
 parser = argparse.ArgumentParser()
 parser.add_argument("name", help="Provide the FQDN", action="store")
+parser.add_argument("-f", "--file", help="Configuration file", action="store", nargs='*', default="")
 parser.add_argument("-s", "--san", help="SANS", action="store", nargs='*', default="")
 args = parser.parse_args()
 
+# Variables from CLI Parser (Argparse)
 hostname = args.name
 sans = args.san
-generateCSR(hostname, sans)
+config_file = args.file
+
+# Run the primary function(s) based on input.
+if config_file is None:
+ generateFromFile(config_file)
+else:
+  generateCSR(hostname,sans)
