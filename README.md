@@ -33,7 +33,7 @@ optional arguments:
   -h, --help            show this help message and exit
   -v, --verbose         Output more infos
   -d, --debug           Enable debug mode
-  -l LOG, --log LOG     Define log file (default: /var/log/certGen.log
+  -l LOG, --log LOG     Define log file (default: /var/log/certGen.log)
   -n NAME, --name NAME  Provide the FQDN
   -s [SAN [SAN ...]], --san [SAN [SAN ...]]
                         SANS, define alternative names
