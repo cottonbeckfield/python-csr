@@ -19,7 +19,7 @@ python setup.py install
 ## Usage
 
 ```bash
-csrgen -n [fqdn]
+./csrgen -n [fqdn]
 ```
 
 Note: you could always use '-h' in order to get some informations ;)
@@ -47,8 +47,8 @@ optional arguments:
 ```
 
 Basic usage would be
-```python
-python csrgen -n test.test.com
+```bash
+./csrgen -n test.test.com
 ```
 
 When more than one hostname is provided, a SAN (Subject Alternate Name)
@@ -57,13 +57,13 @@ certificate and request are generated.  This can be acheived by adding a -s.
 csrgen <hostname> -s <san0> <san1>
 
 ```bash
-python csrgen -n test.test.com -s mushu.test.com pushu.test.com
+./csrgen -n test.test.com -s mushu.test.com pushu.test.com
 ```
 
 You can pass a yaml file as arguments to pre-fill your CSR values (C, ST, L, O, OU). Basically any attribute defined in the YAML file will be set in the certificate. On exception: if you force the hostname with -n parameter, it will override the 'Hostname' set in YAML file.
 
-```python
-python csrgen -f sample.yaml -u csr.yaml
+```bash
+./csrgen -f sample.yaml -u csr.yaml
 ```
 
 ## Debug options
