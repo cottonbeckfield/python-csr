@@ -29,7 +29,7 @@ class Certificate:
     def __init__(self, logger, opts={}):
         self._logger = logger
         self.allowed = ["Digital Signature", "Non Repudiation", "Key Encipherment"]
-        
+
         # Set default usage
         self._level = logging.WARNING
         self._key_size = 2048
@@ -64,8 +64,8 @@ class Certificate:
             for usage in opts['usage']:
                 if usage not in self.allowed:
                     raise Exception('Invalid key usage: {u}'.format(u=usage))
-                self.usage = opts['usage'] 
-            del opts['usage']   
+                self.usage = opts['usage']
+            del opts['usage']
         except KeyError:
             # Keep server default if no usage is set
             pass
@@ -73,7 +73,7 @@ class Certificate:
         self.opts = opts
         self.output('[*] We have already set options:',level=logging.DEBUG)
         self.output('{o}'.format(o=self.opts),level=logging.DEBUG)
-    
+
     def _header(self):
         self.output('\t\t..:: Certificate Signing Request (CSR) Generator ::..\n')
 
@@ -140,14 +140,14 @@ class Certificate:
             crypto.X509Extension("basicConstraints", False, "CA:{c}".format(c=self._isCA())),
             ])
         x509_extensions = base_constraints
-        
+
         # If there are SAN entries, append the base_constraints to include them.
         if len(ss):
             san_constraint = crypto.X509Extension("subjectAltName", False, ss)
             x509_extensions.append(san_constraint)
-        
+
         req.add_extensions(x509_extensions)
-        
+
         # Utilizes generateKey function to kick off key generation.
         key = self.generateKey(TYPE_RSA, self._key_size)
         req.set_pubkey(key)
@@ -162,7 +162,7 @@ class Certificate:
         for k,v in self.opts.items():
             if k is 'hostname':
                 self.output("\t[CN]\t\t-> {v}".format(k=k,v=v))
-            else:    
+            else:
                 self.output("\t[{k}]\t\t-> {v}".format(k=k,v=v))
 
         return req
@@ -215,7 +215,7 @@ class Certificate:
                 continue
             if len(v) is 0:
                 continue
-            
+
             try:
                 self.opts[k] = str(v)
             except Exception:
@@ -251,10 +251,10 @@ class Certificate:
         """Generate Private Key
         """
         self.output('[+] Generate certificate seed Key...')
-        
+
         key = crypto.PKey()
         key.generate_key(type, bits)
-        
+
         return key
 
     def generateFiles(self, mkFile, request):
@@ -267,7 +267,7 @@ class Certificate:
                 f.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, request))
             else:
                 self.output("[!] Failed to create CSR/Key files", level=logging.ERROR)
-        
+
     def output(self, msg, level=logging.WARNING):
         """Generate output to CLI and log file
         """
@@ -299,7 +299,7 @@ class Authority(Certificate):
         except Exception as err:
             raise Exception("Error at {n} initialization: {e}".format(n=self._name, e=err))
         self._ca = True
-    
+
     def initialize(self):
         self.generateCSR()
 
@@ -307,7 +307,7 @@ class Authority(Certificate):
 def main(argv):
     # Define default values
     VERBOSE = False
-    LOG_FILE = "/var/log/certGen.log"
+    LOG_FILE = "./certGen.log"
     LOG_LEVEL = logging.WARNING
     opts = {}
 
@@ -324,7 +324,7 @@ def main(argv):
     parser.add_argument("-f", "--file", help="Load hosts file (CN and optional Alternate Names) list", action="store", default="")
     parser.add_argument("-a", "--authority", help="Generate Authority certificate (Default is server)", action="store_true")
     parser.add_argument("-c", "--client", help="Generate client certificate (Default is server)", action="store_true")
-    
+
     args = parser.parse_args()
 
     # Run the primary function.
@@ -336,7 +336,7 @@ def main(argv):
 
     if args.verbose:
         VERBOSE = True
-    
+
     opts['verbose'] = VERBOSE
 
     if args.debug:
@@ -374,7 +374,7 @@ def main(argv):
             sys.stdout.write('[!] You can not specify alternative names with client certificates')
             sys.exit(1)
         opts['usage'] = ["digitalSignature"]
-    
+
     # Store infos if set
     if args.name:
         opts['hostname'] = args.name
@@ -390,7 +390,7 @@ def main(argv):
 
         # Run interactively if needed for C, ST, L, O, OU values
         cert.getCSRSubjects()
-        
+
         if args.file:
             cert.generateFromFile(args.file)
         else:
