@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 from setuptools import setup, find_packages
 
-# Lets makes ure we have the correct modules installed before continuing.
-# Had issues with people not having OpenSSL not installed, just
-# wanted to run a check.
+# Get required packages from requirements.txt
+# Make it compatible with setuptools and pip
+with open('requirements.txt') as f:
+    requirements = f.read().splitlines()
+
 setup(
     name="CSR Generator",
-        version="1.0",
-        packages=find_packages(),
-    install_requires=[ 'pyopenssl', 'argparse', 'pyyaml' ]
+    version = "1.1.0",
+    packages=find_packages(),
+    install_requires=requirements
 )

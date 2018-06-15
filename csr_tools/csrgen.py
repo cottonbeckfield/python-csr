@@ -23,7 +23,7 @@ import sys, platform, yaml
 import argparse, logging, logging.handlers
 from OpenSSL import crypto, SSL
 
-__version__ = '1.0.1'
+__version__ = '1.1.0'
 
 class Certificate:
     def __init__(self, logger, opts={}):
