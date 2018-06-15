@@ -85,4 +85,7 @@ openssl x509 -inform pem -in test.test.com.cer -noout -text
 ```
 
 # TODO
+- Validate python3 compatibility
+- Finish SubClass Authority to generate a CA certificate (-x)
+- Create csrsign.py to sign a csr based on CA certificate and newly generated .csr
 - Implement Unit Tests
