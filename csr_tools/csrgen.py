@@ -43,8 +43,6 @@ class Certificate:
         except KeyError:
             pass
 
-        self._header()
-
         # Set default log level
         try:
             self._level = opts['level']
@@ -163,7 +161,7 @@ class Certificate:
         self.output("\n[+] Your CSR and certificate ({s} bits) are now generated with:".format(s=self._key_size))
         for k,v in self.opts.items():
             if k is 'hostname':
-                self.output("\t[{k}]\t-> {v}".format(k=k,v=v))
+                self.output("\t[CN]\t\t-> {v}".format(k=k,v=v))
             else:    
                 self.output("\t[{k}]\t\t-> {v}".format(k=k,v=v))
 
@@ -318,7 +316,7 @@ def main(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument("-v", "--verbose", help="Output more infos", action="store_true")
     parser.add_argument("-d", "--debug", help="Enable debug mode", action="store_true")
-    parser.add_argument("-l", "--log", help="Define log file (default: {f}".format(f=LOG_FILE))
+    parser.add_argument("-l", "--log", help="Define log file (default: {f})".format(f=LOG_FILE))
     parser.add_argument("-n", "--name", help="Provide the FQDN", action="store", default="")
     parser.add_argument("-s", "--san", help="SANS, define alternative names", action="store", nargs='*', default="")
     parser.add_argument("-k", "--keysize", help="Provide the key size", action="store", default="2048")

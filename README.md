@@ -76,12 +76,12 @@ openssl req -in test.test.com.csr -noout -text
 
 ### To read a Certificate (CER)
 ```bash
-openssl x509 -in cerfile.cer -noout -text
+openssl x509 -in test.test.com.cer -noout -text
 ```
 
 ### To read a Certificate (PEM)
 ```bash
-openssl x509 -inform pem -in cerfile.cer -noout -text
+openssl x509 -inform pem -in test.test.com.cer -noout -text
 ```
 
 # TODO
