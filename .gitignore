@@ -1,3 +1,6 @@
 dist/*
+__*
 CSR_Generator.egg-info/*
 *.log
+*.csr
+*.key

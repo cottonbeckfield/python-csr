@@ -3,7 +3,8 @@
 Generate a key, self-signed certificate, and certificate request.
 
 ## Information
-You'll notice there is only one version of python scripts. This can be used with both python(2.7) and python(3.5).
+This script is for Python 2.7. Due to how the input() function has changed between python2 and python3, this
+script is not backwards compatible at this time.
 
 ## Installation / Dependencies
 The following modules are required:
