@@ -11,7 +11,7 @@ The following modules are required:
 - Argparse (argparse)
 - YAML (pyyaml)
 
-I've included a setup.py that will install these dependencies if you run:
+I've included a setup.py that will install these dependencies if you have the **setuptools** python package and run:
 ```bash
 python setup.py install
 ```
