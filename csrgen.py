@@ -8,14 +8,14 @@
 # Usage: csrgen -n <hostname> -s <san0> <san1>
 #
 # If you want to generate multiple CSRs, you can use the -f command to
-# feed in a .yaml file via the CLI. See the example sample.yaml in this
+# feed in a .yaml file via the CLI. See the example samples/sample-file.yaml in this
 # repository for examples.
 #
 # If you want to predefine some of your CSR attributes, you can use the -u command
-# to feed in a .yaml file via the CLI. See the example csr.yaml in this repository
+# to feed in a .yaml file via the CLI. See the example samples/csr-sample-unattended.yaml in this repository
 # for examples.
 #
-# Author: Courtney Cotton <cotton@cottoncourtney.com> 06-25-2014, Updated 8-9-2017
+# Author: Cotton Beckfield <cotton@cottonbeckfield.com> 06-25-2014, Updated 01-20-2020
 # Author: Ben Mz <bmz@prohacktive.io> Updated 06-15-2018
 
 # Libraries/Modules
@@ -295,6 +295,7 @@ class Authority(Certificate):
 
 
 def main(argv):
+    print(argv)
     # Define default values
     VERBOSE = False
     LOG_FILE = "./certGen.log"
