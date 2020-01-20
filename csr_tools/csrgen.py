@@ -234,7 +234,7 @@ class Certificate:
         """Parse YAML file and return object generated
         """
         with open(yaml_file, 'r') as stream:
-            cfg = yaml.load(stream)
+            cfg = yaml.safe_load(stream)
         return cfg
 
     def generateKey(self, type, bits):
