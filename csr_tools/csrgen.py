@@ -190,16 +190,6 @@ class Certificate:
                 self.opts['O'] = self._ask("Enter your Organization Name (eg, company) [FTW Enterprise]: ", default='FTW Enterprise')
             elif field is 'OU':
                 self.opts['OU'] = self._ask("Enter your Organizational Unit (eg, section) [IT]: ", default='IT')
-            elif field is 'hostname':
-                self.opts['hostname'] = self._ask("Enter your Common Name (eg, DNS name) [{n}]:".format(n=platform.node()), default=platform.node())
-
-        # Allows you to permanently set values required for CSR
-        # To use, comment raw_input and uncomment this section.
-        # C  = 'US'
-        # ST = 'New York'
-        # L  = 'Location'
-        # O  = 'Organization'
-        # OU = 'Organizational Unit'
 
     # Parse the contents of the YAML file and then
     # auto setup values.
@@ -392,7 +382,7 @@ def main(argv):
         cert.getCSRSubjects()
 
         if args.file:
-            cert.generateFromFile(args.file)
+            cert.loadNodes(args.file)
         else:
             cert.generateCSR()
     except KeyboardInterrupt:
