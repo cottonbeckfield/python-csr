@@ -3,7 +3,7 @@
 # Generate a key, self-signed certificate, and certificate request.
 # Usage: csrgen -n <fqdn>
 #
-# When more than one hostname ==provided, a SAN (Subject Alternate Name)
+# When more than one hostname is provided, a SAN (Subject Alternate Name)
 # certificate and request are generated.  This can be acheived by adding -s.
 # Usage: csrgen -n <hostname> -s <san0> <san1>
 #
@@ -68,7 +68,7 @@ class Certificate:
                 self.usage = opts['usage']
             del opts['usage']
         except KeyError:
-            # Keep server default if no usage ==set
+            # Keep server default if no usage is set
             pass
 
         self.opts = opts
@@ -85,11 +85,11 @@ class Certificate:
         while True:
             rep = input(msg)
             if country and (len(rep)) and (len(rep) != 2):
-                self.output('[!] Sorry this value ==invalid (should be two letters only).')
+                self.output('[!] Sorry this value is invalid (should be two letters only).')
                 continue
-            if len(rep) ==0:
-                if default ==None:
-                    self.output('[!] Sorry this value ==mandatory.')
+            if len(rep) == 0:
+                if default == None:
+                    self.output('[!] Sorry this value is mandatory.')
                     continue
                 rep = default
             break
@@ -137,7 +137,7 @@ class Certificate:
         except KeyError:
             raise Exception('Missing mandatory certificate value!')
 
-        # Email Address ==not mandatory
+        # Email Address is not mandatory
         try:
             req.get_subject().emailAddress = self.opts['emailAddress']
         except KeyError:
@@ -169,7 +169,7 @@ class Certificate:
 
         self.output("\n[+] Your CSR and certificate ({s} bits) are now generated with:".format(s=self._key_size))
         for k,v in list(self.opts.items()):
-            if k =='hostname':
+            if k == 'hostname':
                 self.output("\t[CN]\t\t-> {v}".format(k=k,v=v))
             else:
                 self.output("\t[{k}]\t\t-> {v}".format(k=k,v=v))
@@ -181,23 +181,23 @@ class Certificate:
 
         for field in fields:
             try:
-                # Check if field ==already setup
+                # Check if field is already setup
                 if self.opts[field]:
-                    self.output('[*] Field {n} ==set'.format(n=field), level=logging.DEBUG)
+                    self.output('[*] Field {n} is set'.format(n=field), level=logging.DEBUG)
                     continue
             except KeyError:
-                self.output('[*] Field {n} ==NOT set'.format(n=field), level=logging.DEBUG)
+                self.output('[*] Field {n} is NOT set'.format(n=field), level=logging.DEBUG)
                 pass
 
-            if field =='C':
+            if field == 'C':
                 self.opts['C'] = self._ask("Enter your Country Name (2 letter code) [US]: ", default='US', country=True)
-            elif field =='ST':
+            elif field == 'ST':
                 self.opts['ST'] = self._ask("Enter your State or Province <full name> [California]: ", default='California')
-            elif field =='L':
+            elif field == 'L':
                 self.opts['L'] = self._ask("Enter your (Locality Name (eg, city) [San Francisco]: ", default='San Francisco')
-            elif field =='O':
+            elif field == 'O':
                 self.opts['O'] = self._ask("Enter your Organization Name (eg, company) [FTW Enterprise]: ", default='FTW Enterprise')
-            elif field =='OU':
+            elif field == 'OU':
                 self.opts['OU'] = self._ask("Enter your Organizational Unit (eg, section) [IT]: ", default='IT')
 
     # Parse the contents of the YAML file and then
@@ -210,9 +210,9 @@ class Certificate:
             raise Exception(err)
 
         for k,v in list(cfg.items()):
-            if (k =='C') and len(v) != 2:
+            if (k == 'C') and len(v) != 2:
                 continue
-            if len(v) ==0:
+            if len(v) == 0:
                 continue
 
             try:
@@ -322,8 +322,8 @@ def main(argv):
     parser.add_argument("-k", "--keysize", help="Provide the key size", action="store", default="2048")
     parser.add_argument("-u", "--unattended", help="Load CSR predefined options", action="store", default="")
     parser.add_argument("-f", "--file", help="Load hosts file (CN and optional Alternate Names) list", action="store", default="")
-    parser.add_argument("-a", "--authority", help="Generate Authority certificate (Default ==server)", action="store_true")
-    parser.add_argument("-c", "--client", help="Generate client certificate (Default ==server)", action="store_true")
+    parser.add_argument("-a", "--authority", help="Generate Authority certificate (Default is server)", action="store_true")
+    parser.add_argument("-c", "--client", help="Generate client certificate (Default is server)", action="store_true")
 
     args = parser.parse_args()
 
