@@ -22,6 +22,7 @@
 import sys, platform, yaml
 import argparse, logging, logging.handlers
 from OpenSSL import crypto, SSL
+import ipaddress
 
 __version__ = '1.1.0'
 
@@ -82,12 +83,12 @@ class Certificate:
 
     def _ask(self, msg, country=False, default=None):
         while True:
-            rep = raw_input(msg)
+            rep = input(msg)
             if country and (len(rep)) and (len(rep) != 2):
                 self.output('[!] Sorry this value is invalid (should be two letters only).')
                 continue
-            if len(rep) is 0:
-                if default is None:
+            if len(rep) == 0:
+                if default == None:
                     self.output('[!] Sorry this value is mandatory.')
                     continue
                 rep = default
@@ -112,7 +113,15 @@ class Certificate:
         ss = []
         try:
             for entry in self.opts['sans']:
-                ss.append("DNS: {e}".format(e=entry))
+                try:
+                    is_ip = bool(ipaddress.ip_address(entry))
+                except ValueError:
+                    is_ip = False
+                
+                if is_ip:
+                    ss.append("IP: {e}".format(e=entry))
+                else:
+                    ss.append("DNS: {e}".format(e=entry))
         except KeyError:
             pass
         ss = ", ".join(ss)
@@ -136,14 +145,14 @@ class Certificate:
 
         # Add in extensions
         base_constraints = ([
-            crypto.X509Extension("keyUsage", False, self.usage),
-            crypto.X509Extension("basicConstraints", False, "CA:{c}".format(c=self._isCA())),
+            crypto.X509Extension(bytes("keyUsage",'ascii'), False, bytes(self.usage, 'ascii')),
+            crypto.X509Extension(bytes("basicConstraints",'ascii'), False, bytes("CA:{c}".format(c=self._isCA()),'ascii')),
             ])
         x509_extensions = base_constraints
 
         # If there are SAN entries, append the base_constraints to include them.
         if len(ss):
-            san_constraint = crypto.X509Extension("subjectAltName", False, ss)
+            san_constraint = crypto.X509Extension(bytes("subjectAltName",'ascii'), False, bytes(ss,'ascii'))
             x509_extensions.append(san_constraint)
 
         req.add_extensions(x509_extensions)
@@ -159,8 +168,8 @@ class Certificate:
         self.generateFiles(keyfile, key)
 
         self.output("\n[+] Your CSR and certificate ({s} bits) are now generated with:".format(s=self._key_size))
-        for k,v in self.opts.items():
-            if k is 'hostname':
+        for k,v in list(self.opts.items()):
+            if k == 'hostname':
                 self.output("\t[CN]\t\t-> {v}".format(k=k,v=v))
             else:
                 self.output("\t[{k}]\t\t-> {v}".format(k=k,v=v))
@@ -180,15 +189,15 @@ class Certificate:
                 self.output('[*] Field {n} is NOT set'.format(n=field), level=logging.DEBUG)
                 pass
 
-            if field is 'C':
+            if field == 'C':
                 self.opts['C'] = self._ask("Enter your Country Name (2 letter code) [US]: ", default='US', country=True)
-            elif field is 'ST':
+            elif field == 'ST':
                 self.opts['ST'] = self._ask("Enter your State or Province <full name> [California]: ", default='California')
-            elif field is 'L':
+            elif field == 'L':
                 self.opts['L'] = self._ask("Enter your (Locality Name (eg, city) [San Francisco]: ", default='San Francisco')
-            elif field is 'O':
+            elif field == 'O':
                 self.opts['O'] = self._ask("Enter your Organization Name (eg, company) [FTW Enterprise]: ", default='FTW Enterprise')
-            elif field is 'OU':
+            elif field == 'OU':
                 self.opts['OU'] = self._ask("Enter your Organizational Unit (eg, section) [IT]: ", default='IT')
 
     # Parse the contents of the YAML file and then
@@ -200,10 +209,10 @@ class Certificate:
         except Exception as err:
             raise Exception(err)
 
-        for k,v in cfg.items():
-            if (k is 'C') and len(v) != 2:
+        for k,v in list(cfg.items()):
+            if (k == 'C') and len(v) != 2:
                 continue
-            if len(v) is 0:
+            if len(v) == 0:
                 continue
 
             try:
@@ -221,7 +230,7 @@ class Certificate:
             raise Exception(err)
 
         self.output('[+] Generate certificates for:')
-        for k,v in cfg.items():
+        for k,v in list(cfg.items()):
             self.opts['hostname'] = cfg[k]['hostname']
             if cfg[k]['sans']:
                 self.opts['sans'] = cfg[k]['sans']
@@ -252,9 +261,9 @@ class Certificate:
         """
         with open(mkFile, "w") as f:
             if ".csr" in mkFile:
-                f.write(crypto.dump_certificate_request(crypto.FILETYPE_PEM, request))
+                f.write(crypto.dump_certificate_request(crypto.FILETYPE_PEM, request).decode())
             elif ".key" in mkFile:
-                f.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, request))
+                f.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, request).decode())
             else:
                 self.output("[!] Failed to create CSR/Key files", level=logging.ERROR)
 
@@ -263,15 +272,15 @@ class Certificate:
         """
 
         # Output to log
-        if level == logging.DEBUG:
+        if level  == logging.DEBUG:
             self._logger.debug(msg)
-        elif level == logging.INFO:
+        elif level  == logging.INFO:
             self._logger.info(msg)
-        elif level == logging.WARNING:
+        elif level  == logging.WARNING:
             self._logger.warning(msg)
-        elif level == logging.ERROR:
+        elif level  == logging.ERROR:
             self._logger.error(msg)
-        elif level == logging.CRITICAL:
+        elif level  == logging.CRITICAL:
             self._logger.critical(msg)
         # Misconfigured level are high notifications
         else:
@@ -393,5 +402,5 @@ def main(argv):
 
     sys.stdout.write('\nBye! ;)\n')
 
-if __name__ == '__main__':
+if __name__  == '__main__':
     main(sys.argv)

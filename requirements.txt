@@ -1,3 +1,4 @@
-setuptools==39.1.0
-pyOpenSSL==18.0.0
-PyYAML==5.1
+setuptools==45.2.0
+pyOpenSSL==19.1.0
+PyYAML==5.3.1
+ipaddress==1.0.23
